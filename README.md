@@ -1,13 +1,12 @@
 
 Please Use these links to open - 
 
-Live URL - https://blog-cms-sand.vercel.app/home
-https://blog-cms-sand.vercel.app/preview/home
+Live URL - https://blog-cms-sand.vercel.app/home , 
+https://blog-cms-sand.vercel.app/preview/home ,
 https://blog-cms-sand.vercel.app/studio/home
 
 
 Page Studio: Next.js, Contentful & Versioned Releases
-Goal
 Build a Page Studio that lets authorized users:
 Load pages from Contentful
 Edit in a lightweight studio
