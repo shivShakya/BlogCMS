@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "createdAt": "2026-02-19T17:11:03.018Z",
+  "page": {
+    "pageId": "6suOlW06uoBnCGnHvy1lDx",
+    "slug": "home",
+    "title": "Homepage",
+    "sections": [
+      {
+        "id": "1771521054759",
+        "type": "hero",
+        "props": {
+          "heading": "New Hero",
+          "subheading": "hello"
+        }
+      }
+    ]
+  }
+}

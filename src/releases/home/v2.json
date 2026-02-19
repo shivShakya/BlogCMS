@@ -1,0 +1,19 @@
+{
+  "version": "v2",
+  "createdAt": "2026-02-19T17:20:34.538Z",
+  "page": {
+    "pageId": "6suOlW06uoBnCGnHvy1lDx",
+    "slug": "home",
+    "title": "Homepage",
+    "sections": [
+      {
+        "id": "1771521614497",
+        "type": "hero",
+        "props": {
+          "heading": "The World is changing",
+          "subheading": "and you ?"
+        }
+      }
+    ]
+  }
+}
