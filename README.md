@@ -1,7 +1,6 @@
-Building a Page Studio with Next.js, Contentful & Versioned Releases
+Page Studio: Next.js, Contentful & Versioned Releases
 Goal
-
-Build a Page Studio that lets authorised users:
+Build a Page Studio that lets authorized users:
 
 Load pages from Contentful
 
@@ -13,155 +12,20 @@ Publish immutable, versioned releases
 
 Enforce schema validation
 
-Focus: architecture, determinism, separation of concerns — not UI polish.
+Focus: Architecture, determinism, separation of concerns — not UI polish.
 
 Architecture
-Contentful
-   ↓
-Adapter
-   ↓
-Zod validation
-   ↓
-Registry renderer
-   ↓
-Studio (draft)
-   ↓
-Release snapshot (vX.json)
-   ↓
-Live route
+Data Flow
+Contentful: Source of truth for raw content.
 
-Principle:
-Production never renders from Contentful.
-It renders from frozen JSON files:
+Adapter: Normalizes data into the Page schema.
 
-src/releases/<slug>/vX.json
+Zod Validation: Ensures data integrity.
 
-Result: predictable, auditable, stable.
+Registry Renderer: Maps data types to React components.
 
-Implemented
-Schema-Driven Renderer
+Studio (Draft): Interface for live editing.
 
-Page + Section validated with Zod
+Release Snapshot (vX.json): Immutable file storage.
 
-Error boundaries prevent crashes
-
-Central sectionRegistry maps types → components
-
-Missing types fail deterministically
-
-Contentful Adapter
-
-Single contentfulClient.ts
-
-Normalizes data into Page schema
-
-UI never touches CMS directly
-
-Preview and production fully isolated
-
-Preview Route
-
-/preview/[slug]
-
-Fetch → validate → render
-
-Uses same renderer as production
-
-Studio
-
-/studio/[slug]
-
-Edit hero + CTA
-
-Add/reorder sections
-
-Local React state (Redux planned)
-
-Immutable Publish
-
-Creates releases/<slug>/vX.json
-
-Never mutates old versions
-
-Live route reads latest release only
-
-Clear separation:
-
-Layer	Responsibility
-Contentful	Authoring
-Studio	Draft editing
-Release	Immutable snapshot
-Live route	Delivery
-Pending
-Redux Toolkit
-
-draftPage
-
-ui
-
-publish
-
-Centralized state + deterministic publish flow missing.
-
-RBAC
-
-Roles defined but not enforced:
-
-viewer
-
-editor
-
-publisher
-
-Missing middleware + server-side protection.
-
-Deterministic SemVer
-
-Patch: prop/text change
-
-Minor: section added
-
-Major: section removed/type changed
-
-Idempotent publish
-
-Changelog generation
-
-Quality Gates
-
-Schema tests
-
-Version diff tests
-
-Playwright smoke tests
-
-Axe checks
-
-CI enforcement
-
-Accessibility
-
-Current:
-
-Semantic HTML
-
-Proper headings
-
-Focus states
-
-Pending:
-
-Keyboard audit
-
-prefers-reduced-motion
-
-Axe in CI
-
-Documentation
-
-Status
-
-Core CMS pipeline: complete
-Hardening (security, testing, automation): pending
-
-Overall: ~65% complete
+Live Route: Production delivery.
