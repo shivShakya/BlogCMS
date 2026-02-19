@@ -1,36 +1,167 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Building a Page Studio with Next.js, Contentful & Versioned Releases
+Goal
 
-## Getting Started
+Build a Page Studio that lets authorised users:
 
-First, run the development server:
+Load pages from Contentful
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Edit in a lightweight studio
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Preview as a real landing page
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Publish immutable, versioned releases
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Enforce schema validation
 
-## Learn More
+Focus: architecture, determinism, separation of concerns — not UI polish.
 
-To learn more about Next.js, take a look at the following resources:
+Architecture
+Contentful
+   ↓
+Adapter
+   ↓
+Zod validation
+   ↓
+Registry renderer
+   ↓
+Studio (draft)
+   ↓
+Release snapshot (vX.json)
+   ↓
+Live route
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Principle:
+Production never renders from Contentful.
+It renders from frozen JSON files:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+src/releases/<slug>/vX.json
 
-## Deploy on Vercel
+Result: predictable, auditable, stable.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Implemented
+Schema-Driven Renderer
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Page + Section validated with Zod
+
+Error boundaries prevent crashes
+
+Central sectionRegistry maps types → components
+
+Missing types fail deterministically
+
+Contentful Adapter
+
+Single contentfulClient.ts
+
+Normalizes data into Page schema
+
+UI never touches CMS directly
+
+Preview and production fully isolated
+
+Preview Route
+
+/preview/[slug]
+
+Fetch → validate → render
+
+Uses same renderer as production
+
+Studio
+
+/studio/[slug]
+
+Edit hero + CTA
+
+Add/reorder sections
+
+Local React state (Redux planned)
+
+Immutable Publish
+
+Creates releases/<slug>/vX.json
+
+Never mutates old versions
+
+Live route reads latest release only
+
+Clear separation:
+
+Layer	Responsibility
+Contentful	Authoring
+Studio	Draft editing
+Release	Immutable snapshot
+Live route	Delivery
+Pending
+Redux Toolkit
+
+draftPage
+
+ui
+
+publish
+
+Centralized state + deterministic publish flow missing.
+
+RBAC
+
+Roles defined but not enforced:
+
+viewer
+
+editor
+
+publisher
+
+Missing middleware + server-side protection.
+
+Deterministic SemVer
+
+Patch: prop/text change
+
+Minor: section added
+
+Major: section removed/type changed
+
+Idempotent publish
+
+Changelog generation
+
+Quality Gates
+
+Schema tests
+
+Version diff tests
+
+Playwright smoke tests
+
+Axe checks
+
+CI enforcement
+
+Accessibility
+
+Current:
+
+Semantic HTML
+
+Proper headings
+
+Focus states
+
+Pending:
+
+Keyboard audit
+
+prefers-reduced-motion
+
+Axe in CI
+
+Documentation
+
+Status
+
+Core CMS pipeline: complete
+Hardening (security, testing, automation): pending
+
+Overall: ~65% complete
